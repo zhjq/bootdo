@@ -9,6 +9,7 @@ $().ready(function() {
             }
         }
 	});
+    loadType();
 	validateRule();
 });
 
@@ -34,7 +35,7 @@ function save(status) {
 		success : function(r) {
 			if (r.code == 0) {
 				parent.layer.msg(r.msg);
-				parent.reLoad();
+				this.reLoad();
 				$("#cid").val(r.cid);
 
 			} else {
@@ -62,4 +63,31 @@ function validateRule() {
 function returnList() {
 	var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
 	parent.layer.close(index);
+}
+
+function loadType(){
+    var html = "";
+    $.ajax({
+        url : '/common/dict/list/blog_type',
+        success : function(data) {
+            //加载数据
+            for (var i = 0; i < data.length; i++) {
+                html += '<option value="' + data[i].value + '">' + data[i].name + '</option>'
+            }
+            $(".chosen-select").append(html);
+            $(".chosen-select").chosen({
+                maxHeight : 200
+            });
+            //点击事件
+            $('.chosen-select').on('change', function(e, params) {
+                console.log(params.selected);
+                var opt = {
+                    query : {
+                        type : params.selected,
+                    }
+                }
+                $('#exampleTable').bootstrapTable('refresh', opt);
+            });
+        }
+    });
 }

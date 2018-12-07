@@ -65,7 +65,7 @@
 		}
 		function bindList(offset) {
             $.ajax({
-				url : 'blog/open/list?type=whisper&limit=10&offset=' + offset,
+				url : '/blog/open/list?categories=whisper&limit=10&offset=' + offset,
 				method : 'get',
 				dataType : 'json',
 				success : function(data) {

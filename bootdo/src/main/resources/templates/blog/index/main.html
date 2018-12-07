@@ -41,7 +41,7 @@
 			<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 				<div id="incomeNum"></div>
 				<div class="clearfix">
-					<p id="flagLoaded" style="display: none; text-align: center;">已全部加载</p>
+					<p id="flagLoaded" style="display: none; text-align: center;">已全部显示</p>
 					<a id="flagLoad" style="display: none;" class="btn btn-secondary float-right" 
 						href="javascript:void(0)" onclick="nextPage()">更早 &rarr;</a>
 				</div>
@@ -65,7 +65,7 @@
 		}
 		function bindList(offset) {
             $.ajax({
-				url : 'blog/open/list?type=article&limit=10&offset=' + offset,
+				url : 'blog/open/list?categories=article&limit=10&offset=' + offset,
 				method : 'get',
 				dataType : 'json',
 				success : function(data) {
