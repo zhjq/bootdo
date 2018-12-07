@@ -34,42 +34,18 @@
                             </i>女主人你好呀
                         </h3>
                     </div>
-                    <div class="dropdown profile-element hidden">
-
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <span class="clear">
-                            <span class="block m-t-xs"><strong class="font-bold"
-                                                               th:text="${username}">admin</strong></span>
-                            <span class="text-muted text-xs block">超级管理员<b class="caret"></b></span>
-                             </span>
-                        </a>
-                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li><a @click="personal" href="#">修改头像</a>
-                            </li>
-                            <li><a @click="personal" href="#">个人资料</a>
-                            </li>
-                            <li><a @click="personal" href="#">密码修改</a>
-                            </li>
-                            <li><a @click="personal" href="#">信箱</a>
-                            </li>
-                            <li class="divider"></li>
-                            <li><a href="/logout">安全退出</a>
-                            </li>
-                        </ul>
-                        <div class="logo-element">BootDo</div>
-                    </div>
                 </li>
                 <li><a href="#"> <i class="fa fa-home"></i> <span
-                        class="nav-label">主页</span> <span class="fa arrow"></span>
+                        class="nav-label">首页</span> <span class="fa arrow"></span>
                 </a>
                     <ul class="nav nav-second-level">
                         <li><a id="index001" class="J_menuItem" href="index_v1.html"
-                               data-index="0" th:href="@{/main}">了解BootDo</a></li>
+                               data-index="0" th:href="@{/main}">回到首页</a></li>
                     </ul>
                 </li>
                 <li th:each="menu : ${menus}"><a href="#"> <i
                         class="fa fa fa-bar-chart-o" th:class="${menu.attributes.icon}"></i>
-                    <span class="nav-label" th:text="${menu.text}">基础信息</span> <span
+                    <span class="nav-label" th:text="${menu.text}">基础管理</span> <span
                             class="fa arrow"></span>
                 </a>
                     <ul class="nav nav-second-level">
@@ -130,7 +106,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="hidden-xs"><a @click="personal" href="#" ><i class="fa fa-id-card"></i> 个人</a></li>
+                    <!--<li class="hidden-xs"><a @click="personal" href="#" ><i class="fa fa-id-card"></i> 个人</a></li>-->
                     <li class="dropdown hidden-xs"><a
                             class="right-sidebar-toggle" aria-expanded="false"> <i
                             class="fa fa-tasks"></i> 主题
@@ -171,7 +147,7 @@
                     seamless></iframe>
         </div>
         <div class="footer">
-            <div class="pull-right">BootDo面向学习型的开源框架</div>
+            <div class="pull-right">爱你呦</div>
         </div>
     </div>
     <!--右侧部分结束-->
@@ -183,8 +159,8 @@
                 <li class="active"><a data-toggle="tab" href="#tab-1"> <i
                         class="fa fa-gear"></i> 主题
                 </a></li>
-                <li class=""><a data-toggle="tab" href="#tab-2"> 通知 </a></li>
-                <li><a data-toggle="tab" href="#tab-3"> 项目进度 </a></li>
+                <!--<li class=""><a data-toggle="tab" href="#tab-2"> 通知 </a></li>-->
+                <!--<li><a data-toggle="tab" href="#tab-3"> 项目进度 </a></li>-->
             </ul>
             <div class="tab-content">
                 <div id="tab-1" class="tab-pane active">
@@ -256,24 +232,24 @@
                         </div>
                     </div>
                 </div>
-                <div id="tab-2" class="tab-pane">
+                <!--<div id="tab-2" class="tab-pane">-->
 
-                    <div class="sidebar-title">
-                        <h3>
-                            <i class="fa fa-comments-o"></i> 最新通知
-                        </h3>
-                        <small><i class="fa fa-tim"></i> 您当前有10条未读信息</small>
-                    </div>
-                </div>
-                <div id="tab-3" class="tab-pane">
+                    <!--<div class="sidebar-title">-->
+                        <!--<h3>-->
+                            <!--<i class="fa fa-comments-o"></i> 最新通知-->
+                        <!--</h3>-->
+                        <!--<small><i class="fa fa-tim"></i> 您当前有10条未读信息</small>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div id="tab-3" class="tab-pane">-->
 
-                    <div class="sidebar-title">
-                        <h3>
-                            <i class="fa fa-cube"></i> 最新任务
-                        </h3>
-                        <small><i class="fa fa-tim"></i> 您当前有14个任务，10个已完成</small>
-                    </div>
-                </div>
+                    <!--<div class="sidebar-title">-->
+                        <!--<h3>-->
+                            <!--<i class="fa fa-cube"></i> 最新任务-->
+                        <!--</h3>-->
+                        <!--<small><i class="fa fa-tim"></i> 您当前有14个任务，10个已完成</small>-->
+                    <!--</div>-->
+                <!--</div>-->
             </div>
 
         </div>
@@ -314,6 +290,7 @@
              *  这里多用了一个/user,并且这个user 是必须的,使用user 才会发送消息到指定的用户。 
              *  */
             stomp.subscribe("/user/queue/notifications", handleNotification);
+            stomp.subscribe("/user/queue/updateNotifications", updateNotification);
             stomp.subscribe('/topic/getResponse', function (response) { //订阅/topic/getResponse 目标发送的消息。这个是在控制器的@SendTo中定义的。
                 toastr.options = {
                     "closeButton": true,
@@ -337,6 +314,9 @@
             wrapper.notify();
             toastr.info(message.body);
         }
+        function updateNotification() {
+            setTimeout(wrapper.notify(),2*1000);
+        }
     }
 
     var wrapper = new Vue({
@@ -350,16 +330,6 @@
                 $.getJSON('/oa/notify/message', function (r) {
                     wrapper.total = r.total;
                     wrapper.rows = r.rows;
-                });
-            },
-            personal: function () {
-                layer.open({
-                    type: 2,
-                    title: '个人设置',
-                    maxmin: true,
-                    shadeClose: false,
-                    area: ['800px', '600px'],
-                    content: '/sys/user/personal'
                 });
             }
         },

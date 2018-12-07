@@ -1,21 +1,22 @@
 package com.bootdo.oa.service.impl;
 
+import com.bootdo.oa.dao.NotifyRecordDao;
+import com.bootdo.oa.domain.NotifyRecordDO;
+import com.bootdo.oa.service.NotifyRecordService;
+import com.bootdo.oa.service.NotifyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
-import com.bootdo.oa.dao.NotifyRecordDao;
-import com.bootdo.oa.domain.NotifyRecordDO;
-import com.bootdo.oa.service.NotifyRecordService;
-
-
 
 @Service
 public class NotifyRecordServiceImpl implements NotifyRecordService {
 	@Autowired
 	private NotifyRecordDao notifyRecordDao;
+	@Autowired
+	private NotifyService notifyService;
 	
 	@Override
 	public NotifyRecordDO get(Long id){
@@ -54,7 +55,10 @@ public class NotifyRecordServiceImpl implements NotifyRecordService {
 
 	@Override
 	public int changeRead(NotifyRecordDO notifyRecord) {
-		return notifyRecordDao.changeRead(notifyRecord);
+		Long[] userIds = {notifyRecord.getUserId()};
+		int r = notifyRecordDao.changeRead(notifyRecord);
+		notifyService.sendNotification(userIds,"/queue/updateNotifications",null);
+		return r;
 	}
 
 }

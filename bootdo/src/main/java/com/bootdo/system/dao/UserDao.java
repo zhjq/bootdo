@@ -1,11 +1,10 @@
 package com.bootdo.system.dao;
 
 import com.bootdo.system.domain.UserDO;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 import java.util.Map;
-
-import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 
@@ -18,9 +17,11 @@ public interface UserDao {
 
 	UserDO get(Long userId);
 	
-	List<UserDO> list(Map<String,Object> map);
-	
-	int count(Map<String,Object> map);
+	List<UserDO> list(Map<String, Object> map);
+
+	List<UserDO> listCascadeDict(Map<String, Object> map);
+
+	int count(Map<String, Object> map);
 	
 	int save(UserDO user);
 	
@@ -31,5 +32,7 @@ public interface UserDao {
 	int batchRemove(Long[] userIds);
 	
 	Long[] listAllDept();
+
+	String[] getNamesByIds(Long[] userIds);
 
 }

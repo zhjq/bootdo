@@ -62,7 +62,7 @@ function load() {
 						width: '20%',
 						title : '标题',
 						formatter:function (value,row,index) {
-                            return '<a href="#" onclick="read(\''+ row.id+ '\')">'+row.title+'</a>';
+                            return '<a href="#" onclick="read('+ row.id+','+index+ ')">'+row.title+'</a>';
                         }
 					},
 					{
@@ -121,9 +121,7 @@ function load() {
 						field : 'opera',
 						align : 'center',
 						formatter : function(value, row, index) {
-							var e = '<a class="btn btn-primary btn-sm" href="#" mce_href="#" title="打开" onclick="read(\''
-								+ row.id
-								+ '\')"><i class="fa fa-book"></i></a> ';
+							var e = '<a class="btn btn-primary btn-sm" href="#" mce_href="#" title="打开" onclick="read('+row.id+','+index+')"><i class="fa fa-book"></i></a> ';
 							var d = '<a class="btn btn-warning btn-sm ' + s_remove_h + '" href="#" title="删除"  mce_href="#" onclick="remove(\''
 								+ row.id
 								+ '\')"><i class="fa fa-remove"></i></a> ';
@@ -148,7 +146,7 @@ function add() {
 		content : prefix + '/add' // iframe的url
 	});
 }
-function read(id) {
+function read(id, index) {
 	layer.open({
 		type : 2,
 		title : '查看',
@@ -157,6 +155,7 @@ function read(id) {
 		area : [ '800px', '520px' ],
 		content : prefix + '/read/' + id // iframe的url
 	});
+    $('#exampleTable').bootstrapTable('updateCell',{index:index,field:'isRead',value:1});
 }
 function remove(id) {
 	layer.confirm('确定要删除选中的记录？', {

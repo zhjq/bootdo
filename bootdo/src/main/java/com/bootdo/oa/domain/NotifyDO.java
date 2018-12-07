@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Date;
 
 
-
 /**
  * 通知通告
  * 
@@ -42,6 +41,8 @@ public class NotifyDO implements Serializable {
 	private String delFlag;
 	
 	private Long[] userIds;
+
+	private String userNames;
 
 	/**
 	 * 设置：编号
@@ -192,6 +193,12 @@ public class NotifyDO implements Serializable {
 	}
 	public void setUserIds(Long[] userIds) {
 		this.userIds = userIds;
+	}
+	public String getUserNames() {
+		return userNames;
+	}
+	public void setUserNames(String userNames) {
+		this.userNames = userNames;
 	}
 
 	@Override

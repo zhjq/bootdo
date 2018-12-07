@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <meta charset="utf-8">
 <head th:include="include :: header"></head>
+<link href="/css/layui.css" rel="stylesheet">
 <body class="gray-bg">
 <div class="wrapper wrapper-content ">
     <div class="row">
@@ -14,7 +15,7 @@
                             <div class="col-sm-8">
                                 <select data-placeholder="--选择类别--" name="type" id="type"
                                         class="form-control chosen-select" tabindex="2" required>
-                                    <option value="">--选择类别--</option>
+                                    <!--<option value="">&#45;&#45;选择类别&#45;&#45;</option>-->
                                 </select>
                             </div>
                         </div>
@@ -33,7 +34,11 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">附件：</label>
                             <div class="col-sm-8">
-                                <input id="files" name="files" class="form-control" type="file">
+                                <button type="button" class="layui-btn" id="upload">
+                                        <i class="fa fa-cloud"></i>选择文件
+                                </button>
+                                <a id="files"></a>
+                                <input id="filesVaule" name="files" type="text" hidden>
                             </div>
                         </div>
                         <div class="form-group">
@@ -42,7 +47,7 @@
                                 <input id="userIds" name="userIds" class="hidden">
                                 <input id="userNames" name="userNames" class="form-control"
                                         type="text" onclick="openUser()"
-                                        readonly="readonly" placeholder="接收人">
+                                        readonly="readonly" placeholder="请选择接收人" required>
                             </div>
                         </div>
                         <div class="form-group">
@@ -76,8 +81,28 @@
     </div>
 </div>
 <div th:include="include::footer"></div>
-<script type="text/javascript" src="/js/appjs/oa/notify/add.js">
-
+<script src="/js/layui.js"></script>
+<script type="text/javascript" src="/js/appjs/oa/notify/add.js"></script>
+<script type="text/javascript">
+    layui.use('upload', function () {
+        var upload = layui.upload;
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#upload', //绑定元素
+            url: '/common/sysFile/upload', //上传接口
+            size: 1000,
+            accept: 'file',
+            done: function (r) {
+                $("#files").attr('href',r.fileName);
+                $("#files").attr('download',r.fileName);
+                $("#files").text(r.fileName);
+                $("#filesVaule").attr("value",r.fileName);
+            },
+            error: function (r) {
+                layer.msg(r.msg);
+            }
+        });
+    });
 </script>
 </body>
 </html>

@@ -20,5 +20,11 @@ public class Constant {
 
     public static String LOG_ERROR = "error";
 
-    
+    //通知公告状态-草稿
+    public static final String NOTIFY_TYPE_DRAFT = "0";
+    //通知公告状态-发布
+    public static final String NOTIFY_TYPE_PUBLIC = "1";
+
+
+
 }

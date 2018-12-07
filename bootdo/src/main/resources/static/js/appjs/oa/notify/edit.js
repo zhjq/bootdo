@@ -1,5 +1,5 @@
 $().ready(function() {
-	//loadType();
+
 	validateRule();
 });
 
@@ -49,26 +49,17 @@ function validateRule() {
 	})
 }
 
-function loadType(){
-	var html = "";
-	$.ajax({
-		url : '/common/dict/list/oa_notify_type',
-		success : function(data) {
-			// 加载数据
-			for (var i = 0; i < data.length; i++) {
-				html += '<option value="' + data[i].value + '">' + data[i].name + '</option>'
-			}
-			$(".chosen-select").append(html);
-			$(".chosen-select").chosen({
-				maxHeight : 200
-			});
-			$(".chosen-select").val($("#Ttype").val());
-			$(".chosen-select").trigger("chosen:updated");
-			// 点击事件
-			$('.chosen-select').on('change', function(e, params) {
-				
-			});
-		}
-	});
+var openUser = function(){
+    layer.open({
+        type:2,
+        title:"选择人员",
+        area : [ '300px', '450px' ],
+        content:"/sys/user/treeView"
+    })
+}
+
+function loadUser(userIds,userNames){
+    $("#userIds").val(userIds);
+    $("#userNames").val(userNames);
 }
 

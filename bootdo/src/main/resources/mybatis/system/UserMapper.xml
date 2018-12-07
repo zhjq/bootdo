@@ -28,6 +28,49 @@
 		  		  <if test="hobby != null and hobby != ''"> and hobby = #{hobby} </if>
 		  		  <if test="province != null and province != ''"> and province = #{province} </if>
 		  		  <if test="city != null and city != ''"> and city = #{city} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by user_id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	<select id="listCascadeDict" resultType="com.bootdo.system.domain.UserDO">
+		select `user_id`,`username`,`name`,`password`,`dept_id`,`email`,`mobile`,`status`,`user_id_create`,`gmt_create`,`gmt_modified`,`sex`,`birth`,`pic_id`,`live_address`,`hobby`,`province`,`city`,`district` from sys_user as a
+		<if test="staffTypeName != null and staffTypeName != ''">
+		inner join (select value from sys_dict where type = 'staffType' and name = #{staffTypeName}) as b on a.staff_type=b.value
+		</if>
+		<if test="organizationTypeName != null and organizationTypeName != ''">
+		inner join (select value from sys_dict where type = 'organizationType' and name = #{organizationTypeName}) as c on a.organization_type=c.value
+		</if>
+		<if test="positionTypeName != null and positionTypeName != ''">
+		inner join (select value from sys_dict where type = 'positionType' and name = #{positionTypeName}) as d on a.position_type=d.value
+		</if>
+        <where>  
+		  		  <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+		  		  <if test="username != null and username != ''"> and username = #{username} </if>
+		  		  <if test="name != null and name != ''"> and name = #{name} </if>
+		  		  <if test="password != null and password != ''"> and password = #{password} </if>
+		  		  <if test="deptId != null and deptId != ''"> and dept_id = #{deptId} </if>
+		  		  <if test="email != null and email != ''"> and email = #{email} </if>
+		  		  <if test="mobile != null and mobile != ''"> and mobile = #{mobile} </if>
+		  		  <if test="status != null and status != ''"> and status = #{status} </if>
+		  		  <if test="userIdCreate != null and userIdCreate != ''"> and user_id_create = #{userIdCreate} </if>
+		  		  <if test="gmtCreate != null and gmtCreate != ''"> and gmt_create = #{gmtCreate} </if>
+		  		  <if test="gmtModified != null and gmtModified != ''"> and gmt_modified = #{gmtModified} </if>
+		  		  <if test="sex != null and sex != ''"> and sex = #{sex} </if>
+		  		  <if test="birth != null and birth != ''"> and birth = #{birth} </if>
+		  		  <if test="picId != null and picId != ''"> and pic_id = #{picId} </if>
+		  		  <if test="liveAddress != null and liveAddress != ''"> and live_address = #{liveAddress} </if>
+		  		  <if test="hobby != null and hobby != ''"> and hobby = #{hobby} </if>
+		  		  <if test="province != null and province != ''"> and province = #{province} </if>
+		  		  <if test="city != null and city != ''"> and city = #{city} </if>
 		  		  <if test="district != null and district != ''"> and district = #{district} </if>
 		  		</where>
         <choose>
@@ -42,7 +85,6 @@
 			limit #{offset}, #{limit}
 		</if>
 	</select>
-	
  	<select id="count" resultType="int">
 		select count(*) from sys_user
 		 <where>  
@@ -133,7 +175,7 @@
 			<if test="hobby != null">`hobby` = #{hobby}, </if>
 			<if test="province != null">`province` = #{province}, </if>
 			<if test="city != null">`city` = #{city}, </if>
-			<if test="district != null">`district` = #{district}</if>
+			<if test="district != null">`district` = #{district} </if>
 		</set>
 		where user_id = #{userId}
 	</update>
@@ -150,6 +192,13 @@
 	</delete>
 
 	<select id="listAllDept" resultType="long">
-				select DISTINCT dept_id from sys_user
+		select DISTINCT dept_id from sys_user
+	</select>
+
+	<select id="getNamesByIds" resultType="String">
+		select username from sys_user where user_id in
+		<foreach item="userId" collection="array" open="(" separator="," close=")">
+			#{userId}
+		</foreach>
 	</select>
 </mapper>

@@ -117,6 +117,19 @@
 		</where>
 	</select>
 
+	<select id="getUserIdsByNotifyId" resultType="long">
+		select user_id from oa_notify_record where notify_id =
+		#{value}
+	</select>
+
+	<select id="getUserIdsByNotifyIds" resultType="long">
+		select distinct user_id from oa_notify_record where notify_id in
+		<foreach item="id" collection="array" open="(" separator=","
+				 close=")">
+			#{id}
+		</foreach>
+	</select>
+
 	<delete id="removeByNotifbyId">
 		delete from oa_notify_record where notify_id =
 		#{value}

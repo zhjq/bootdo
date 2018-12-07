@@ -2,11 +2,10 @@ package com.bootdo.oa.dao;
 
 import com.bootdo.oa.domain.NotifyDO;
 import com.bootdo.oa.domain.NotifyDTO;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 import java.util.Map;
-
-import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 通知通告

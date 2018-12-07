@@ -17,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -72,7 +71,7 @@ public class NotifyController extends BaseController {
 		List<DictDO> dictDOS = dictService.listByType("oa_notify_type");
 		String type = notify.getType();
 		for (DictDO dictDO:dictDOS){
-			if(type.equals(dictDO.getValue())){
+			if(type.equals(dictDO.getName())){
 				dictDO.setRemarks("checked");
 			}
 		}
@@ -92,6 +91,10 @@ public class NotifyController extends BaseController {
 			return R.error(1, "演示系统不允许修改,完整体验请部署程序");
 		}
 		notify.setCreateBy(getUserId());
+		//theamleaf checkbox未选中状态传递null，选中状态传递1
+		if(notify.getStatus()==null){
+			notify.setStatus("0");
+		}
 		if (notifyService.save(notify) > 0) {
 			return R.ok();
 		}
@@ -107,6 +110,10 @@ public class NotifyController extends BaseController {
 	public R update(NotifyDO notify) {
 		if (Constant.DEMO_ACCOUNT.equals(getUsername())) {
 			return R.error(1, "演示系统不允许修改,完整体验请部署程序");
+		}
+		//theamleaf checkbox未选中状态传递null，选中状态传递1
+		if(notify.getStatus()==null){
+			notify.setStatus("0");
 		}
 		notifyService.update(notify);
 		return R.ok();
@@ -144,13 +151,14 @@ public class NotifyController extends BaseController {
 
 	@ResponseBody
 	@GetMapping("/message")
-	PageUtils message() {
+    PageUtils message() {
 		Map<String, Object> params = new HashMap<>(16);
 		params.put("offset", 0);
 		params.put("limit", 3);
 		Query query = new Query(params);
         query.put("userId", getUserId());
         query.put("isRead",Constant.OA_NOTIFY_READ_NO);
+		query.put("status",Constant.NOTIFY_TYPE_PUBLIC);
 		return notifyService.selfList(query);
 	}
 
@@ -161,10 +169,10 @@ public class NotifyController extends BaseController {
 
 	@ResponseBody
 	@GetMapping("/selfList")
-	PageUtils selfList(@RequestParam Map<String, Object> params) {
+    PageUtils selfList(@RequestParam Map<String, Object> params) {
 		Query query = new Query(params);
 		query.put("userId", getUserId());
-
+		query.put("status",Constant.NOTIFY_TYPE_PUBLIC);
 		return notifyService.selfList(query);
 	}
 
@@ -172,6 +180,10 @@ public class NotifyController extends BaseController {
 	@RequiresPermissions("oa:notify:edit")
 	String read(@PathVariable("id") Long id, Model model) {
 		NotifyDO notify = notifyService.get(id);
+		//管理员删除了通知/公告
+		if(notify==null){
+			return "oa/notify/404";
+		}
 		//更改阅读状态
 		NotifyRecordDO notifyRecordDO = new NotifyRecordDO();
 		notifyRecordDO.setNotifyId(id);

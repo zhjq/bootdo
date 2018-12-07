@@ -137,7 +137,8 @@
 		oa_notify_record r right JOIN oa_notify n on r.notify_id
 		= n.id where
 		r.user_id =#{userId} and
-		r.is_read = #{isRead}
+		r.is_read = #{isRead} and
+		n.status = #{status}
 	</select>
 
 	<select id="listDTO" resultType="com.bootdo.oa.domain.NotifyDTO">
@@ -150,6 +151,7 @@
 			<if test="isRead != null and isRead != ''"> and r.is_read = #{isRead} </if>
 			<if test="userId != null and userId != ''"> and r.user_id = #{userId} </if>
 			<if test="readDate != null and readDate != ''"> and r.read_date = #{readDate} </if>
+			<if test="status != null and status != ''"> and n.status = #{status} </if>
 		</where>
 		order by is_read ASC, update_date DESC
 		<if test="offset != null and limit != null">

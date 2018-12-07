@@ -129,7 +129,11 @@ function load() {
 							var f = '<a class="btn btn-success btn-sm" href="#" title="备用"  mce_href="#" onclick="resetPwd(\''
 								+ row.id
 								+ '\')"><i class="fa fa-key"></i></a> ';
-							return e + d;
+							if(row.status==0){
+                                return e + d;
+							}else if(row.status==1){
+                                return d;
+							}
 						}
 					} ]
 			});

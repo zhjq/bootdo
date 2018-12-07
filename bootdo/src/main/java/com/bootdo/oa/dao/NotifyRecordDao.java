@@ -1,11 +1,10 @@
 package com.bootdo.oa.dao;
 
 import com.bootdo.oa.domain.NotifyRecordDO;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 import java.util.Map;
-
-import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 通知通告发送记录
@@ -40,4 +39,8 @@ public interface NotifyRecordDao {
 	int batchRemoveByNotifbyId(Long[] notifyIds);
 
 	int changeRead(NotifyRecordDO notifyRecord);
+
+	Long[] getUserIdsByNotifyId(Long id);
+
+	Long[] getUserIdsByNotifyIds(Long[] notifyIds);
 }

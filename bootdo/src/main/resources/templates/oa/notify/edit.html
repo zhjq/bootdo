@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <meta charset="utf-8">
 <head th:include="include :: header"></head>
+<link href="/css/layui.css" rel="stylesheet">
 <body class="gray-bg">
 	<div class="wrapper wrapper-content " id="app">
 		<div class="row">
@@ -16,8 +17,8 @@
 								<div class="col-sm-8">
 									<select data-placeholder="--选择类别--" name="type" id="type"
 										class="form-control chosen-select" tabindex="2">
-										<option value="">-- 选择类别 --</option>
-										<option th:each="oaNotifyType : ${oaNotifyTypes}" th:value="${oaNotifyType.value}" th:text="${oaNotifyType.name}" th:if="${oaNotifyType.remarks ==checked}" th:selected="selected"></option>
+										<!--<option value="">&#45;&#45; 选择类别 &#45;&#45;</option>-->
+										<option th:each="oaNotifyType : ${oaNotifyTypes}" th:value="${oaNotifyType.value}" th:text="${oaNotifyType.name}" th:selected="${oaNotifyType.remarks eq 'checked'}"></option>
 									</select>
 								</div>
 							</div>
@@ -38,16 +39,28 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">附件：</label>
 								<div class="col-sm-8">
-									<input id="files" name="files" th:value="${notify.files}"
-										class="form-control" type="text">
+									<button type="button" class="layui-btn" id="upload">
+										<i class="fa fa-cloud"></i>选择文件
+									</button>
+									<a id="files" th:href="${notify.files}" th:download="${notify.files}" th:text="${notify.files}"></a>
+									<input id="filesVaule" name="files" type="text" th:value="${notify.files}" hidden>
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-3 control-label">已经发布：</label>
+								<label class="col-sm-3 control-label">接收人：</label>
+								<div class="col-sm-8">
+									<input id="userIds" name="userIds" class="hidden" th:value="${#strings.listJoin(notify.userIds,',')}">
+									<input id="userNames" name="userNames" class="form-control"
+										   type="text" onclick="openUser()" th:value="${notify.userNames}"
+										   readonly="readonly" required>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">立即发布：</label>
 								<div class="switch  col-sm-1">
 									<div class="onoffswitch">
-										<input id="status" name="status" checked="" type="checkbox"
-											th:value="${notify.status}" class="onoffswitch-checkbox"> <label
+										<input id="status" name="status" th:checked="${notify.status eq '1'}" type="checkbox"
+											th:value="1" class="onoffswitch-checkbox"> <label
 											class="onoffswitch-label" for="status"> <span
 											class="onoffswitch-inner"></span> <span
 											class="onoffswitch-switch"></span>
@@ -74,8 +87,28 @@
 		</div>
 	</div>
 	<div th:include="include::footer"></div>
-	<script type="text/javascript" src="/js/appjs/oa/notify/edit.js">
-		
+	<script src="/js/layui.js"></script>
+	<script type="text/javascript" src="/js/appjs/oa/notify/edit.js?v=18120701"></script>
+	<script type="text/javascript">
+        layui.use('upload', function () {
+            var upload = layui.upload;
+            //执行实例
+            var uploadInst = upload.render({
+                elem: '#upload', //绑定元素
+                url: '/common/sysFile/upload', //上传接口
+                size: 1000,
+                accept: 'file',
+                done: function (r) {
+                    $("#files").attr('href',r.fileName);
+                    $("#files").attr('download',r.fileName);
+                    $("#files").text(r.fileName);
+                    $("#filesVaule").attr("value",r.fileName);
+                },
+                error: function (r) {
+                    layer.msg(r.msg);
+                }
+            });
+        });
 	</script>
 </body>
 </html>
