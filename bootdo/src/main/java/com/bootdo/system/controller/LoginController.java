@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -51,10 +52,10 @@ public class LoginController extends BaseController {
 			if(fileService.isExist(fileDO.getUrl())){
 				model.addAttribute("picUrl",fileDO.getUrl());
 			}else {
-				model.addAttribute("picUrl","/img/photo_s.jpg");
+				model.addAttribute("picUrl","/img/photo_s.jpg?v="+new Date());
 			}
 		}else {
-			model.addAttribute("picUrl","/img/photo_s.jpg");
+			model.addAttribute("picUrl","/img/photo_s.jpg?v="+new Date());
 		}
 		model.addAttribute("username", getUser().getUsername());
 		return "index_v1";

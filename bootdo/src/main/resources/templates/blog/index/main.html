@@ -5,13 +5,30 @@
 <body>
 	<nav th:include="blog/index/include_blog::nav"  class="navbar navbar-default navbar-custom navbar-fixed-top" ></nav>
 	<header class="intro-header"
-		style="background-image: url('/img/blog/home-bg.jpg')">
+		style="background-image: url('/img/blog/tonghua.jpg')">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 					<div class="site-heading">
-						<h1>BootDo Blog</h1>
-						<span class="subheading">bootdo 博客</span>
+						<h1>隐身 ❤ 晨雪</h1>
+						<span class="meta">
+							<span>至我们在一起度过的</span>
+							<span id="days" class="time"></span>
+							<span><font color="yellow">天</font></span>
+							<span id="hours" class="time"></span>
+							<span><font color="green">小时</font></span>
+							<span id="minutes" class="time"></span>
+							<span><font color="blue">分钟</font></span>
+							<span id="seconds" class="time"></span>
+							<span><font color="red">秒</font></span>
+							<span>的美好时光</span>
+						</span>
+						<span class="subheading"> </span>
+						<span class="subheading">往后余生</span>
+						<span class="subheading">风雪是你</span>
+						<span class="subheading">平淡是你</span>
+						<span class="subheading">目光所致是你</span>
+						<span class="subheading">心底温柔也是你</span>
 					</div>
 				</div>
 			</div>
@@ -37,49 +54,64 @@
 		var limit = 10;
 		var currentPage = 0;
 		var total;
+        var sTime = new Date(2018,7,18,1,16,00);
 		$(function(){
 			bindList(0);
-
+            time();
 		});
-
+        window.setInterval("time()",1000);
 		function nextPage() {
 			bindList(currentPage * limit)
 		}
 		function bindList(offset) {
-			$
-				.ajax({
-					url : 'blog/open/list?type=article&limit=10&offset=' + offset,
-					method : 'get',
-					dataType : 'json',
-					success : function(data) {
-						var rows = data.rows;
-						total = data.total;
-						var htmlText = "";
-						for (i = 0; i < rows.length; i++) {
-							htmlText += '<div class="post-preview">';
-							htmlText += '<a href="/blog/open/post/' + rows[i].cid + '">';
-							htmlText += '<h2 class="post-title">';
-							htmlText += rows[i].title;
-							htmlText += '</h2>';
-							htmlText += '</a>';
-							htmlText += '<p class="post-meta">作者：<a href="#">'
-								+ rows[i].author
-								+ '</a> &nbsp;&nbsp; '
-								+ rows[i].gtmModified + '</p>';
-							htmlText += '</div>';
-							htmlText += '<hr>';
-						}
-						$("#incomeNum").append(htmlText);
-						document.getElementById("flagLoad").style.display = "block";
-						currentPage++;
-						if (total <= currentPage * limit) {
-							document.getElementById("flagLoaded").style.display = "block";
-							document.getElementById("flagLoad").style.display = "none";
-						}
+            $.ajax({
+				url : 'blog/open/list?type=article&limit=10&offset=' + offset,
+				method : 'get',
+				dataType : 'json',
+				success : function(data) {
+					var rows = data.rows;
+					total = data.total;
+					var htmlText = "";
+					for (i = 0; i < rows.length; i++) {
+						htmlText += '<div class="post-preview">';
+						htmlText += '<a href="/blog/open/post/' + rows[i].cid + '">';
+						htmlText += '<h2 class="post-title">';
+						htmlText += rows[i].title;
+						htmlText += '</h2>';
+						htmlText += '</a>';
+						htmlText += '<p class="post-meta">作者：<a href="#">'
+							+ rows[i].author
+							+ '</a> &nbsp;&nbsp; '
+							+ rows[i].gtmModified + '</p>';
+						htmlText += '</div>';
+						htmlText += '<hr>';
 					}
-				});
+					$("#incomeNum").append(htmlText);
+					document.getElementById("flagLoad").style.display = "block";
+					currentPage++;
+					if (total <= currentPage * limit) {
+						document.getElementById("flagLoaded").style.display = "block";
+						document.getElementById("flagLoad").style.display = "none";
+					}
+				}
+			});
 		}
+        function time(){
+            var currTime = new Date(); //当前时间
+            //将xxxx-xx-xx的时间格式，转换为 xxxx/xx/xx的格式
+            var totalTime = currTime.getTime() - sTime.getTime();
+            var days = parseInt(totalTime / parseInt(1000 * 60 * 60 * 24));
+            totalTime = totalTime % parseInt(1000 * 60 * 60 * 24);
+            var hours = parseInt(totalTime / parseInt(1000 * 60 * 60));
+            totalTime = totalTime % parseInt(1000 * 60 * 60);
+            var minutes = parseInt(totalTime / parseInt(1000 * 60));
+            totalTime = totalTime % parseInt(1000 * 60);
+            var seconds = parseInt(totalTime / parseInt(1000));
+            document.getElementById('days').innerHTML=days;
+            document.getElementById('hours').innerHTML=hours;
+            document.getElementById('minutes').innerHTML=minutes;
+            document.getElementById('seconds').innerHTML=seconds;
+        }
 	</script>
-
 
 </html>

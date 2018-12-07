@@ -27,6 +27,10 @@ public class BlogController {
 	String blog() {
 		return "blog/index/main";
 	}
+	@GetMapping("/open/whisper")
+	String whisper() {
+		return "blog/index/whisper";
+	}
 
 	@ResponseBody
 	@GetMapping("/open/list")
@@ -56,4 +60,5 @@ public class BlogController {
 		model.addAttribute("bContent", bContentDO);
 		return "blog/index/post";
 	}
+
 }
